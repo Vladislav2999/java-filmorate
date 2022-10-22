@@ -12,7 +12,7 @@ public class UserTests {
     @Test
     void LoginWithSpace(){
         UserController userController=new UserController();
-        User user=new User(LocalDate.of(2003,03,31));
+        User user=new User("eee@mail.ru","Ivan K", LocalDate.of(2003,03,31));
         Throwable exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> {
