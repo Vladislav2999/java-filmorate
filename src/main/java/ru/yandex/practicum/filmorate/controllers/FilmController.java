@@ -30,7 +30,7 @@ public class FilmController {
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        isValid(film);
+        validateFilm(film);
         createFilmId(film);
         films.put(film.getId(), film);
         log.debug("Получен запрос POST. Передан обьект {}", film);
@@ -40,7 +40,7 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
-        isValid(film);
+        validateFilm(film);
         if (films.containsKey(film.getId())) {
             if (!films.containsValue(film)) {
                 films.replace(film.getId(), film);
@@ -61,7 +61,7 @@ public class FilmController {
         id++;
         film.setId(id);
     }
-    private void isValid(Film film){
+    private void validateFilm(Film film){
         if (film.getReleaseDate().isBefore(BIRTH_MOVIE)) {
             log.error("Передан запрос POST с некорректным данными фильима {}.", film);
             throw new ValidationException(HttpStatus.resolve(400));

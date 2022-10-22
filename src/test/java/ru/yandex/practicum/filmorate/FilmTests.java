@@ -13,8 +13,7 @@ public class FilmTests {
     @Test
     void LoginWithSpace(){
         FilmController filmController= new FilmController();
-        Film film=new Film(" ","Происходит только хорошее",
-                LocalDate.of(1795,12,28),0);
+        Film film=new Film(LocalDate.of(1795,12,28));
         Throwable exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> {

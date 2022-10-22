@@ -15,9 +15,13 @@ public class User {
     private String name;
     @NotBlank
     @Email
-    private final String email;
+    private  String email;
     @NotBlank
-    private final String login;
+    private  String login;
     @PastOrPresent
     private final LocalDate birthday;
+
+    public User(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 }

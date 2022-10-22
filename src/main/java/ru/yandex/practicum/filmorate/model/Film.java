@@ -11,13 +11,17 @@ public class Film {
 
     private Integer id;
     @NotBlank
-    private final String name;
+    private  String name;
     @NotBlank
     @Size(min=0,max = 200)
-    private final String description;
+    private  String description;
     @NotNull
     private final LocalDate releaseDate;
     @Min(1)
     @Positive
-    private final int duration;
+    private  int duration;
+
+    public Film(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 }
