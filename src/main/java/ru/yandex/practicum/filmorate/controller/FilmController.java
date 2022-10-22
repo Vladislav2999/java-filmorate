@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/films")
@@ -18,9 +16,9 @@ public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @GetMapping
-    public Collection<Film> getFilms() {
-        log.info("Количество фильмов: {}", films.size());
-        return films.values();
+    public List<Film> gettingAllFilms() {
+        log.debug("Получен запрос GET /films.");
+        return new ArrayList<>(films.values());
     }
 
     @PostMapping
