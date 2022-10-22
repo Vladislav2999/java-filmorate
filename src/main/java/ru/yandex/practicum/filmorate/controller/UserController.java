@@ -16,9 +16,9 @@ public class UserController {
     private int id = 0;
 
     @GetMapping
-    public Collection<User> getUsers() {
-        log.info("Количество пользователей: {}", users.size());
-        return users.values();
+    public List<User> gettingAllUsers() {
+        log.debug("Получен запрос GET /users");
+        return new ArrayList<>(users.values());
     }
 
     @PostMapping
