@@ -19,7 +19,7 @@ class UserTests {
 
     @Test
     void createUserOrdinaryEmailTest() {
-        User testUser = new User(1,"aaa@mail.ru","alexLoLo","alex",
+        User testUser = new User(1,"aaa@mail.ru","vladDDD","vlad",
                 LocalDate.of(1999,01,30));
         userController.createUser(testUser);
         assertTrue(userController.getUsers().contains(testUser));
@@ -28,8 +28,8 @@ class UserTests {
 
     @Test
     void createUserWithBlankEmailTest() {
-        User testUser = new User(1,"","alexLoLo","alex",
-                LocalDate.of(1999,01,30));
+        User testUser = new User(1,"","vladDDD","vlad",
+                LocalDate.of(1999,03,29));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),
@@ -38,8 +38,8 @@ class UserTests {
 
     @Test
     void createUserWithEmailWithoutSymbolTest() {
-        User testUser = new User(1,"invalid.email.ru","alexLoLo","alex",
-                LocalDate.of(1999,01,30));
+        User testUser = new User(1,"invalid.email.ru","vladDDD","vlad",
+                LocalDate.of(1999,03,29));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),
@@ -48,8 +48,8 @@ class UserTests {
 
     @Test
     void createUserWithBlankLoginTest() {
-        User testUser = new User(1,"valid@email.ru","","alex",
-                LocalDate.of(1999,01,30));
+        User testUser = new User(1,"valid@email.ru","","vlad",
+                LocalDate.of(1999,03,29));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
@@ -57,8 +57,8 @@ class UserTests {
 
     @Test
     void createUserWithLoginWithBlanksTest() {
-        User testUser = new User(1,"valid@email.ru","a a a","alex",
-                LocalDate.of(1999,01,30));
+        User testUser = new User(1,"valid@email.ru","v v v","vlad",
+                LocalDate.of(1999,03,29));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
@@ -67,7 +67,7 @@ class UserTests {
     @Test
     void createUserWithBlankNameTest() {
         User testUser = new User(1,"valid@email.ru","aaaa","",
-                LocalDate.of(1999,01,30));
+                LocalDate.of(1999,03,29));
         userController.createUser(testUser);
         assertTrue(userController.getUsers().contains(testUser));
         assertEquals(testUser,userController.getUsers().get(0));
@@ -76,8 +76,8 @@ class UserTests {
 
     @Test
     void createUserWithDateOfBirthInFutureTest() {
-        User testUser = new User(1,"valid@email.ru","alexlolo","alex",
-                LocalDate.of(2024,01,30));
+        User testUser = new User(1,"valid@email.ru","vladDDD","vlad",
+                LocalDate.of(2024,03,29));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Дата рождения не может быть в будущем.");
