@@ -47,7 +47,7 @@ public class UserController {
         return user;
     }
 
-    protected void validateUser(User user) throws ValidationException {
+    public void validateUser(User user) throws ValidationException {
         if (user.getEmail() == null || !user.getEmail().contains("@")) {
             log.debug("Адрес электронной почты пуст/не содержит @");
             throw new ValidationException("Проверьте адрес электронной почты.");

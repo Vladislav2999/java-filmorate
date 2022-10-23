@@ -50,7 +50,7 @@ public class FilmController {
         return film;
     }
 
-    protected void validateFilm(Film film) throws ValidationException {
+    public void validateFilm(Film film) throws ValidationException {
         if (film.getName() == null || film.getName().isBlank()) {
             log.debug("Название фильма не указано");
             throw new ValidationException("Название фильма не указано.");
