@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 class UserTests {
 
@@ -18,7 +19,7 @@ class UserTests {
 
     @Test
     void createUserOrdinaryEmailTest() {
-        User testUser = new User(1,"aaa@mail.ru","vladZXZ","vlad",
+        User testUser = new User(1,"aaa@mail.ru","alexLoLo","alex",
                 LocalDate.of(1999,01,30));
         userController.createUser(testUser);
         assertTrue(userController.getUsers().contains(testUser));
@@ -27,8 +28,8 @@ class UserTests {
 
     @Test
     void createUserWithBlankEmailTest() {
-        User testUser = new User(1,"","vladZXZ","vlad",
-                LocalDate.of(1999,03,29));
+        User testUser = new User(1,"","alexLoLo","alex",
+                LocalDate.of(1999,01,30));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),
@@ -37,8 +38,8 @@ class UserTests {
 
     @Test
     void createUserWithEmailWithoutSymbolTest() {
-        User testUser = new User(1,"invalid.email.ru","vladZXZ","vlad",
-                LocalDate.of(1999,03,29));
+        User testUser = new User(1,"invalid.email.ru","alexLoLo","alex",
+                LocalDate.of(1999,01,30));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),
@@ -47,8 +48,8 @@ class UserTests {
 
     @Test
     void createUserWithBlankLoginTest() {
-        User testUser = new User(1,"valid@email.ru","","vlad",
-                LocalDate.of(1999,03,29));
+        User testUser = new User(1,"valid@email.ru","","alex",
+                LocalDate.of(1999,01,30));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
@@ -56,8 +57,8 @@ class UserTests {
 
     @Test
     void createUserWithLoginWithBlanksTest() {
-        User testUser = new User(1,"valid@email.ru","a a a","vlad",
-                LocalDate.of(1999,03,29));
+        User testUser = new User(1,"valid@email.ru","a a a","alex",
+                LocalDate.of(1999,01,30));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
@@ -66,7 +67,7 @@ class UserTests {
     @Test
     void createUserWithBlankNameTest() {
         User testUser = new User(1,"valid@email.ru","aaaa","",
-                LocalDate.of(1999,03,29));
+                LocalDate.of(1999,01,30));
         userController.createUser(testUser);
         assertTrue(userController.getUsers().contains(testUser));
         assertEquals(testUser,userController.getUsers().get(0));
@@ -75,8 +76,8 @@ class UserTests {
 
     @Test
     void createUserWithDateOfBirthInFutureTest() {
-        User testUser = new User(1,"valid@email.ru","vladZXZ","vlad",
-                LocalDate.of(2024,03,29));
+        User testUser = new User(1,"valid@email.ru","alexlolo","alex",
+                LocalDate.of(2024,01,30));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> userController.createUser(testUser));
         assertEquals(exception.getMessage(),"Дата рождения не может быть в будущем.");
