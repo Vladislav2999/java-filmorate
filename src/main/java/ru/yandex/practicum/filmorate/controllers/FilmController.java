@@ -67,5 +67,4 @@ public class FilmController {
             throw new ValidationException(HttpStatus.resolve(400));
         }
     }
-
 }

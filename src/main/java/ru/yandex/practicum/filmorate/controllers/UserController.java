@@ -1,6 +1,4 @@
 package ru.yandex.practicum.filmorate.controllers;
-
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,7 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        validateUser(user);
+        isValid(user);
         createUserId(user);
         if (user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -40,7 +39,7 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        validateUser(user);
+        isValid(user);
         if (users.containsKey(user.getId())) {
             if (!users.containsValue(user)) {
                 users.replace(user.getId(), user);
@@ -61,7 +60,7 @@ public class UserController {
         id++;
         user.setId(id);
     }
-    private  void validateUser(User user){
+    private  void isValid(User user){
         if(user.getLogin().contains(" ")){
             throw new ValidationException(HttpStatus.resolve(400));
         }

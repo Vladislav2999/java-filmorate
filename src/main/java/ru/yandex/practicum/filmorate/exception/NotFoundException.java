@@ -8,4 +8,3 @@ public class NotFoundException extends ResponseStatusException {
         super(httpStatus);
     }
 }
-
