@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        isValid(user);
+        validateUser(user);
         createUserId(user);
         if (user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -40,7 +40,7 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        isValid(user);
+        validateUser(user);
         if (users.containsKey(user.getId())) {
             if (!users.containsValue(user)) {
                 users.replace(user.getId(), user);
@@ -61,7 +61,7 @@ public class UserController {
         id++;
         user.setId(id);
     }
-    private  void isValid(User user){
+    private  void validateUser(User user){
         if(user.getLogin().contains(" ")){
             throw new ValidationException(HttpStatus.resolve(400));
         }
