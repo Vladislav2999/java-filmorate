@@ -37,7 +37,7 @@ public class UserTests {
         @Test
         @DisplayName("имя пустое")
         protected void validateNameTest() throws ValidationException {
-            user.setName("");
+            user.setName(" ");
             controller.validateUser(user);
             assertEquals(user.getLogin(), user.getName());
         }
