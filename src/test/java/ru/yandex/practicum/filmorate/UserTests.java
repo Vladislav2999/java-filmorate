@@ -1,85 +1,83 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class UserTests {
+class UserTests{
+    private User user;
+    private UserService service;
 
-    @Autowired
-    private UserController userController;
-
-    @Test
-    void createUserOrdinaryEmailTest() {
-        User testUser = new User(1,"aaa@mail.ru","vladDDD","vlad",
-                LocalDate.of(1999,01,30));
-        userController.createUser(testUser);
-        assertTrue(userController.getUsers().contains(testUser));
-        assertEquals(testUser,userController.getUsers().get(userController.getUsers().size()-1));
+    @BeforeEach
+    protected void beforeEach() {
+        service = new UserService(new InMemoryUserStorage());
+        user = new User();
+        user.setLogin("dolore");
+        user.setName("Nick Name");
+        user.setBirthday(LocalDate.of(1946, 8, 20));
+        user.setEmail("mail@mail.ru");
     }
 
     @Test
-    void createUserWithBlankEmailTest() {
-        User testUser = new User(1,"","vladDDD","vlad",
-                LocalDate.of(1999,03,29));
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.createUser(testUser));
-        assertEquals(exception.getMessage(),
-                "Электронная почта не может быть пустой и должна содержать символ @ .");
+    @DisplayName("имя пустое")
+    protected void validateNameTest() throws ValidationException {
+        user.setName("");
+        service.validate(user);
+        assertEquals(user.getLogin(), user.getName());
     }
 
     @Test
-    void createUserWithEmailWithoutSymbolTest() {
-        User testUser = new User(1,"invalid.email.ru","vladDDD","vlad",
-                LocalDate.of(1999,03,29));
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.createUser(testUser));
-        assertEquals(exception.getMessage(),
-                "Электронная почта не может быть пустой и должна содержать символ @ .");
+    @DisplayName("имя пустое (null)")
+    protected void validateNameNullTest() throws ValidationException {
+        user.setName(null);
+        service.validate(user);
+        assertEquals(user.getLogin(), user.getName());
+    }
+    @Test
+    @DisplayName("почта пустая")
+    protected void validateEmailNullTest() {
+        user.setEmail(null);
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(user));
+        assertEquals("Проверьте адрес электронной почты.", ex.getMessage());
     }
 
     @Test
-    void createUserWithBlankLoginTest() {
-        User testUser = new User(1,"valid@email.ru","","vlad",
-                LocalDate.of(1999,03,29));
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.createUser(testUser));
-        assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
+    @DisplayName("почта не содержит @")
+    protected void validateEmailTest() {
+        user.setEmail("afgs.yan.ru");
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(user));
+        assertEquals("Проверьте адрес электронной почты.", ex.getMessage());;
     }
 
     @Test
-    void createUserWithLoginWithBlanksTest() {
-        User testUser = new User(1,"valid@email.ru","v v v","vlad",
-                LocalDate.of(1999,03,29));
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.createUser(testUser));
-        assertEquals(exception.getMessage(),"Логин не может быть пустым и содержать пробелы.");
+    @DisplayName("логин пустой")
+    protected void validateLoginNullTest() {
+        user.setLogin(null);
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(user));
+        assertEquals("Логин не может содержать пробелы или быть пустым", ex.getMessage());
     }
 
     @Test
-    void createUserWithBlankNameTest() {
-        User testUser = new User(1,"valid@email.ru","aaaa","",
-                LocalDate.of(1999,03,29));
-        userController.createUser(testUser);
-        assertTrue(userController.getUsers().contains(testUser));
-        assertEquals(testUser,userController.getUsers().get(0));
-        assertEquals(testUser.getName(),userController.getUsers().get(0).getLogin());
+    @DisplayName("логин содержит пробел")
+    protected void validateLoginTest() {
+        user.setLogin("Asdf Bahk");
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(user));
+        assertEquals("Логин не может содержать пробелы или быть пустым", ex.getMessage());
     }
 
     @Test
-    void createUserWithDateOfBirthInFutureTest() {
-        User testUser = new User(1,"valid@email.ru","vladDDD","vlad",
-                LocalDate.of(2024,03,29));
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.createUser(testUser));
-        assertEquals(exception.getMessage(),"Дата рождения не может быть в будущем.");
+    @DisplayName("день рождение в будущем")
+    protected void validateBirthdayTest() {
+        user.setBirthday(LocalDate.of(2024, 7, 14));
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(user));
+        assertEquals("Дата рождения не может быть в будущем.", ex.getMessage());
     }
 }
