@@ -18,8 +18,6 @@ public class FilmController {
     private final FilmService filmService;
 
 
-
-
     //получить список всех фильмов
     @GetMapping
     public Collection<Film> getFilms() {

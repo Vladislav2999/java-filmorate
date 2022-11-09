@@ -20,7 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     //получить список пользователей
     @GetMapping
     public Collection<User> getUsers() {
