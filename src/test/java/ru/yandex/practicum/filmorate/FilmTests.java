@@ -1,68 +1,72 @@
 package ru.yandex.practicum.filmorate;
 
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class FilmTests {
+class FilmTests{
+    private Film film;
+    private FilmService service;
 
-    @Autowired
-    private FilmController filmController;
-
-    @Test
-    void createFilmOrdinaryEmailTest() {
-        Film testFilm = new Film(1,"Jaws10","Film about sharks.",
-                LocalDate.of(2025,01,30),120);
-        filmController.createFilm(testFilm);
-        assertTrue(filmController.getFilms().contains(testFilm));
-        assertEquals(testFilm,filmController.getFilms().get(0));
+    @BeforeEach
+    protected void beforeEach() {
+        service = new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage());
+        film = new Film();
+        film.setName("nisi eiusmod");
+        film.setDescription("adipisicing");
+        film.setReleaseDate(LocalDate.of(1967, 03, 25));
+        film.setDuration(100);
     }
 
     @Test
-    void createFilmWithBlankNameTest() {
-        Film testFilm = new Film(1,"","Film about sharks.",
-                LocalDate.of(2025,01,30),120);
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> filmController.createFilm(testFilm));
-        assertEquals(exception.getMessage(),"Название не может быть пустым.");
+    @DisplayName("название фильма пустое (null)")
+    protected void validateNameNullTest() {
+        film.setName(null);
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(film));
+        assertEquals("Название фильма не указано.", ex.getMessage());
     }
 
     @Test
-    void createFilmWithMoreThan200SymbolsDescriptionTest() {
-        Film testFilm = new Film(1,"Jaws10","Film about sharks and sharks and more sharks " +
-                "and more sharks and more sharks and more sharks and more sharks and more sharks and more sharks " +
-                "and more sharks and more sharks and more sharks and more sharks and more sharks and more sharks " +
-                "and more sharks and more sharks and more sharks and more sharks and more sharks and more sharks " +
-                "and more sharks.", LocalDate.of(2025,01,30),120);
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> filmController.createFilm(testFilm));
-        assertEquals(exception.getMessage(),"Максимальная длина описания — 200 символов превышена.");
+    @DisplayName("название фильма пустое")
+    protected void validateNameTest() {
+        film.setName("");
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(film));
+        assertEquals("Название фильма не указано.", ex.getMessage());
+    }
+    @Test
+    @DisplayName("описание больше 200 символов")
+    protected void validateDescriptionMore200Test() {
+        film.setDescription("американский комедийный боевик режиссёра и сценариста Роусона Маршалла Тёрбера. " +
+                "Главные роли исполнили Дуэйн Джонсон, Райан Рейнольдс и Галь Гадот. Это третий совместный проект " +
+                "Тёрбера и Джонсона после картин «Полтора шпиона» и «Небоскрёб», " +
+                "третья совместная работа Гадот и Джонсона после фильмов «Форсаж 5» и " +
+                "«Форсаж 6» и вторая коллаборация между Джонсоном и Рейнольдсом после фильма «Форсаж: Хоббс и Шоу».");
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(film));
+        assertEquals("Описание фильма не должно превышать 200 символов.", ex.getMessage());
     }
 
     @Test
-    void createFilmWithDateReleaseInIncorrectPastTest() {
-        Film testFilm = new Film(1,"Jaws10","Film about sharks.",
-                LocalDate.of(1895,12,27),120);
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> filmController.createFilm(testFilm));
-        assertEquals(exception.getMessage(),"Дата релиза указана неверно.");
+    @DisplayName("продолжительность отрицательная")
+    protected void validateDurationTest() {
+        film.setDuration(-10);
+        Exception ex = assertThrows(ValidationException.class, () -> service.validate(film));
+        assertEquals("Продолжительность фильма не может быть отрицательной.", ex.getMessage());
     }
 
     @Test
-    void createFilmWithMinusDurationTest() {
-        Film testFilm = new Film(1,"Jaws10","Film about sharks.",
-                LocalDate.of(2025,12,27),-120);
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> filmController.createFilm(testFilm));
-        assertEquals(exception.getMessage(),"Продолжительность фильма должна быть положительной.");
+    @DisplayName("релиз раньше 20 декабря 1895 года")
+    protected void validateReleaseTest() {
+        film.setReleaseDate(LocalDate.of(1745, 11,1));
+        Exception exception = assertThrows(ValidationException.class, () -> service.validate(film));
+        assertEquals("Дата релиза не может быть раньше 28 декабря 1895 года.", exception.getMessage());
     }
 }
