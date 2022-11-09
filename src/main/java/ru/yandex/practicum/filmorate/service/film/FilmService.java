@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service.film;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,15 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FilmService implements GeneralService<Film> {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private static final LocalDate REFERENCE_DATE = LocalDate.of(1895,12,28);
 
-    @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
-        this.filmStorage = filmStorage;
-        this.userStorage = userStorage;
-    }
 
     //получить список всех фильмов
     public Collection<Film> getAll() {
