@@ -19,8 +19,8 @@ import java.util.Set;
 public class User extends StorageData {
     @Email(message = "электронная почта не соответствует необходимому формату")
     private String email;
-    @NotBlank(message = "логин не соответствует необходимому формату")
-    @NotEmpty(message = "логин не соответствует необходимому формату")
+    @NotBlank(message = "логин не не может быть пусты")
+    @NotEmpty(message = "логин не сне может быть равным нулю или null")
     private String login;
     private String name;
     @Past(message = "дата рождения не должна быть в будущем")

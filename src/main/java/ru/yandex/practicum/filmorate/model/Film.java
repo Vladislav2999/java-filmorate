@@ -27,7 +27,7 @@ public class Film extends StorageData {
     private LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
     private int duration;
-    private Set<Long> userIds = new HashSet<>();
+    private Set<User> userIds = new HashSet<>();
     private int rate = 0;
     private List<Genre> genres = new ArrayList<>();
     private Mpa mpa;

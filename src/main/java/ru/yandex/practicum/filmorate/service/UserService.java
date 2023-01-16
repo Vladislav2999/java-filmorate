@@ -71,7 +71,7 @@ public class UserService {
         return userStorage.getFriends(userId);
     }
 
-    protected void validate(User user) {
+    private void validate(User user) {
         if (user.getEmail() == null) {
             throw new NotValidException("Email не указан");
         }

@@ -83,7 +83,7 @@ public class FilmService {
         storage.delete(id);
     }
 
-    protected void validate(Film film) {
+    private void validate(Film film) {
         if (StringUtils.isBlank(film.getName())) {
             throw new NotValidException("Имя фильма неверное");
         }
