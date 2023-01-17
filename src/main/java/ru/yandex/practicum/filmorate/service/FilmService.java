@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model.service;
+package ru.yandex.practicum.filmorate.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +83,7 @@ public class FilmService {
         storage.delete(id);
     }
 
-    private void validate(Film film) {
+    protected void validate(Film film) {
         if (StringUtils.isBlank(film.getName())) {
             throw new NotValidException("Имя фильма неверное");
         }

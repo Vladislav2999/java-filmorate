@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model.service;
+package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class UserService {
         return userStorage.getFriends(userId);
     }
 
-    private void validate(User user) {
+    protected void validate(User user) {
         if (user.getEmail() == null) {
             throw new NotValidException("Email не указан");
         }
